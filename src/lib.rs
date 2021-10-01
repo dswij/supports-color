@@ -45,9 +45,13 @@ fn supports_color(stream: Stream) -> usize {
         Err(_) => false,
     };
     let min = std::cmp::max(force_color, 0);
+		dbg!(force_color);
+		dbg!(no_color);
+		dbg!(std::env::var("CLICOLOR"));
     if force_color > 0 {
         force_color
     } else if !atty::is(stream) || no_color {
+				dbg!("here");
         0
     } else if std::env::var("TERM") == Ok("dumb".into()) {
         min
@@ -67,6 +71,7 @@ fn supports_color(stream: Stream) -> usize {
     {
         1
     } else {
+				dbg!("else");
         min
     }
 }
