@@ -1,13 +1,14 @@
 on: [push, pull_request]
 
-name: miri
+name: Tests
 
 jobs:
   check:
-    name: Miri tests
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Install latest nightly
         uses: actions-rs/toolchain@v1
         with:
@@ -15,7 +16,13 @@ jobs:
             override: true
             components: miri
 
-      - name: Run miri
+      - name: Run non-miri test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: -- --test-threads=1 # will mess up env_variable when run in parallel
+
+      - name: Run miri test
         uses: actions-rs/cargo@v1
         with:
           command: miri
